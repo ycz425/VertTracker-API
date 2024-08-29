@@ -1,0 +1,2 @@
+# VertTracker API
+The VertTracker API is a RESTful API designed to help athletes, coaches, and fitness enthusiasts track and analyze vertical jump performance. This API allows users to log their vertical jump measurements, view progress summaries, and gain insights into their performance over time.
