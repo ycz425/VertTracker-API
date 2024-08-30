@@ -1,10 +1,12 @@
 # VertTracker API
 The VertTracker API is a RESTful API designed to be a convenient tool to help athletes, coaches, and fitness enthusiasts track and analyze vertical jump performance. This API allows users to log their vertical jump measurements, view progress summaries, and gain insights into their performance over time. The VertTracker API computes users' vertical jumps based on their hang times – how long they remain off the ground during their jumps. By simply recording a video of themselves jumping, users can easily measure their vertical jump performance with minimal setup.
 
-🚧 **Development in Progress** 🚧
+## Usage
+Since this API is not deployed and does not have a live database, a sample SQLite database, `sample.db`, that contains sample data has been provided within the `instances` folder. This allows you to test and explore the API endpoints locally.
 
-This API is currently in the development stage. All features are either under construction or subject to change.
-Please note that the API may not be fully functional and is subject to changes as development progresses.
+**1. Run the Application**: To get started, simply execute the `run.py` file. A server will be hosted on `http://127.0.0.1:5000` from which the API endpoints can be called.
+
+**2. Call Endpoints**: Send requests to the API by appending the endpoint URLs to the base URL. Using an API client tool such as Postman is recommended for ease of use.
 
 ## Endpoints
 ### 1. **Register User**
@@ -56,7 +58,7 @@ Please note that the API may not be fully functional and is subject to changes a
   - **200 OK**: Returns a JSON object.
     ```json
     {
-      "msg": "registration success"
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNTAzMzU4NSwianRpIjoiZDEwNTM2NzYtMjBlZC00ZjJlLWEyY2YtMDJhMDY0NjQyMmU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzI1MDMzNTg1LCJjc3JmIjoiZTAzY2MxYzctNDg4Yy00MDQ2LTliNTItOGRlMjllNWZhMTgxIiwiZXhwIjoxNzI1MDM0NDg1fQ.eEsTkL7NCOO3WOwSw-MOVSj-z0knlY_jkTnDLOlOV5A"
     }
     ```
   - **401 Unauthorized**: Indicates either an incorrect username or password.
@@ -109,9 +111,9 @@ Please note that the API may not be fully functional and is subject to changes a
 - **Parameters**:
   - **variant** (string, optional): The jump variant. Must be either `"MAX"` (maximum approach jump) or `"CMJ"` (counter movement jump). If omitted, queries all jump variants. Must not be omitted when using the `"avg"` aggregation.
   - **aggregation** (string, optional): The aggregation method for aggregating multiple jumps in a single day. Must be either `"avg"` (average) or  `"max"` (maximum). If omitted, queries all jump records without aggregation. The variant must not be omitted when using the `"avg"` aggregation.
-  - **height-unit** (string, optional): The unit of measurement for jump height. Must be either `"cm"` (centimeters), `"m"` (meters), or `"in"` (inches). If omitted, defaults to meter.
+  - **height-unit** (string, optional): The unit of measurement for jump height. Must be either `"cm"` (centimeters), `"m"` (meters), or `"in"` (inches). If omitted, defaults to meters.
   - **weight-unit** (string, optional): The unit of measurement for body weight. Must be either `"kg"` (kilograms) or `"lbs"` (pounds). If omitted, defaults to kilograms.
-  - **order-by** (string, optional): The order in which the queried jump records are listed. Must be either `"date"` (ascending date), `"weight"` (ascending weight), or `"jump"` (ascending jump height). If omitted, defaults to `"date"`.
+  - **order-by** (string, optional): The order in which the queried jump records are listed. Must be either `"date"` (ascending date), `"weight"` (ascending weight), or `"height"` (ascending jump height). If omitted, defaults to `"date"`.
   - **utc-offset** (int, optional): The UTC offset hours for a timezone. Must be an integer from -12 to 14. If omitted, defaults to UTC+00:00.
 - **Responses**:
   - **200 OK**: Returns a list of JSON objects.
@@ -145,10 +147,24 @@ Please note that the API may not be fully functional and is subject to changes a
 
 
 ### 5. **Generate Plot** 
-- **URL**: `/api/jumps`
+- **URL**: `/api/plot`
 - **Method**: `GET`
 - **Description**: Generates a plot showing the user's jump progress over time.
-🚧 **Endpoint Under Construction** 🚧
+- **Authorization Required**
+  - **Authentication Type**: Bearer Token (JWT)
+  - **Header Format**: `Authorization: Bearer <token>`
+- **Parameters**:
+  - **variant** (string, optional): The jump variant. Must be either `"MAX"` (maximum approach jump) or `"CMJ"` (counter movement jump). If omitted, defaults to `"MAX"`.
+  - **aggregation** (string, optional): The aggregation method for aggregating multiple jumps in a single day. Must be either `"avg"` (average) or  `"max"` (maximum). If omitted, defaults to `"max"`.
+  - **height-unit** (string, optional): The unit of measurement for jump height. Must be either `"cm"` (centimeters), `"m"` (meters), or `"in"` (inches). If omitted, defaults to meters.
+  - **utc-offset** (int, optional): The UTC offset hours for a timezone. Must be an integer from -12 to 14. If omitted, defaults to UTC+00:00.
+  - **Responses**:
+    - **200 OK**: Returns Content-Type: `image/png`
+    ![Sample Response](https://i.ibb.co/ZmtZCtq/3-Un3-CNzy-D.png)
+    - **400 Bad Request**: Indicates a problem with the request body.
+    - **500 Internal Server Error**: Indicates a problem with the server.
+
+
 
 
 ### 6. **Show Summary**

@@ -64,7 +64,7 @@ class VerticalJumpRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     height = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-    variant = db.Column(db.String(3), nullable=False)  # MAX or CMJ
+    variant = db.Column(db.String(3), nullable=False)
     weight = db.Column(db.Float, nullable=True)
     note = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer,
